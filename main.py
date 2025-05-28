@@ -78,17 +78,72 @@ for nombre_reg, regularizador in regularizadoresPropios.items():
         resultados_evaluacion = evaluate_model(model, X_test, y_test)
         
         # Capturar los resultados
-        results.append({
+        # Métricas relevantes del modelo:
+        #   Regularizador: Tipo de regularización aplicada (L1 o L2) para controlar el sobreajuste
+        #   Algoritmo optimizacion: Optimizador utilizado para actualizar los pesos del modelo
+        #   Train Loss: Pérdida en el conjunto de entrenamiento, indica qué tan bien el modelo se ajusta a los datos de entrenamiento
+        #   Validation Loss: Pérdida en el conjunto de validación, ayuda a detectar sobreajuste
+        #   Test Loss: Pérdida en el conjunto de prueba, medida final del rendimiento del modelo
+        #   Test Accuracy: Proporción de predicciones correctas en el conjunto de prueba
+        #   Precision: Proporción de predicciones positivas que fueron correctas, útil cuando los falsos positivos son costosos
+        #   Recall: Proporción de casos positivos reales que fueron identificados correctamente, útil cuando los falsos negativos son costosos
+        #   F1_score: Media armónica entre precisión y recall, balance entre ambos métricas
+        #   ROC_AUC: Área bajo la curva ROC, mide la capacidad del modelo para distinguir entre clases
+        #   Training Time (s): Tiempo total de entrenamiento en segundos, útil para comparar eficiencia computacional
+        res = {
             'Regularizador': nombre_reg,
             'Algoritmo optimizacion': nombre_opt,
             'Train Loss': history.history['loss'][-1],
             'Validation Loss': history.history['val_loss'][-1],
             'Test Loss': resultados_evaluacion['loss_test'], 
             'Test Accuracy': resultados_evaluacion['accuracy_test'],
+            'Precision': resultados_evaluacion['Precision'],
+            'Recall': resultados_evaluacion['Recall'],
+            'F1_score': resultados_evaluacion['F1_score'],
+            'ROC_AUC': resultados_evaluacion['roc_auc'],
             'Training Time (s)': tiempo_entrenamiento
-        })
+        }
+
+        # Línea crítica que proporciona feedback inmediato del rendimiento del modelo
+        print(f"✔ {nombre_reg} + {nombre_opt} → Acc: {res['Test Accuracy']:.4f}, F1: {res['F1_score']:.4f}, AUC: {res['ROC_AUC']:.4f}")
+        results.append(res)
+
 
 # Convertir los resultados a un DataFrame de pandas para una mejor visualización
 results_df = pd.DataFrame(results)
 print("\n--- Tabla de Resultados Numéricos ---")
 print(results_df.round(4).to_string())
+
+
+# Visualización del tiempo de entrenamiento
+import matplotlib.pyplot as plt
+
+# Crear etiquetas combinadas para el eje x
+results_df['Combinación'] = results_df['Algoritmo optimizacion'] + " (" + results_df['Regularizador'] + ")"
+combinaciones = results_df['Combinación']
+tiempos = results_df['Training Time (s)']
+
+# Gráfico de barras
+plt.figure(figsize=(12, 6))
+bars = plt.bar(combinaciones, tiempos, color='skyblue')
+
+# Etiquetas y título
+plt.title('Tiempo de Entrenamiento por Combinación de Modelo', fontsize=14, pad=20)
+plt.xlabel('Optimizador + Regularización', fontsize=12)
+plt.ylabel('Tiempo (segundos)', fontsize=12)
+plt.xticks(rotation=45, ha='right')
+
+# Añadir valores encima de cada barra
+for bar in bars:
+    altura = bar.get_height()
+    plt.text(bar.get_x() + bar.get_width()/2, altura, f'{altura:.2f}s', ha='center', va='bottom')
+
+plt.tight_layout()
+plt.savefig("tiempo_entrenamiento.png", dpi=300)
+plt.show()
+
+# Mostrar resumen
+print("\n--- Resumen de Tiempos de Entrenamiento ---")
+mejor_tiempo = results_df['Training Time (s)'].min()
+mejor_modelo = results_df.loc[results_df['Training Time (s)'] == mejor_tiempo, 'Combinación'].iloc[0]
+print(f"Modelo más rápido: {mejor_modelo} - Tiempo: {mejor_tiempo:.2f} segundos")

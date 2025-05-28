@@ -8,23 +8,15 @@ def load_and_preprocess_data(filepath):
     df = pd.read_csv(filepath)
 
     # Eliminar columnas innecesarias
-    df.drop(['customerID'], axis=1, inplace=True)
+    #df.drop(['customerID'], axis=1, inplace=True)
 
-    # Convertir 'TotalCharges' a numérico
-    df['TotalCharges'] = pd.to_numeric(df['TotalCharges'], errors='coerce')
-    df.dropna(inplace=True)
+    # Codificar variable objetivo ('class')
+    df['class'] = df['class'].map({'e': 0, 'p': 1})
 
-    # Codificar variables categóricas
-    for column in df.select_dtypes(include=['object']).columns:
-        if column != 'Churn':
-            df[column] = LabelEncoder().fit_transform(df[column])
+    # Codificar el resto de variables categóricas con one-hot encoding
+    X = pd.get_dummies(df.drop('class', axis=1))
 
-    # Codificar variable objetivo
-    df['Churn'] = df['Churn'].map({'No': 0, 'Yes': 1})
-
-    # Dividir en características y objetivo
-    X = df.drop('Churn', axis=1)
-    y = df['Churn']
+    y = df['class']
 
     # Escalar características
     X = StandardScaler().fit_transform(X)

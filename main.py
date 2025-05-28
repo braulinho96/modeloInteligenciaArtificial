@@ -12,7 +12,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 
 # Cargar y preprocesar los datos de Telco Customer Churn
-X_train, X_test, y_train, y_test = load_and_preprocess_data('WA_Fn-UseC_-Telco-Customer-Churn.csv')
+X_train, X_test, y_train, y_test = load_and_preprocess_data('mushrooms.csv')
 
 # Definir funciones de penalización integradas de Keras, para comparar con las personalizadas
 # L1: Penalizacion de Lasso: penaliza la suma de los valores absolutos de los pesos, provoca que # algunos pesos se vuelvan exactamente cero, 

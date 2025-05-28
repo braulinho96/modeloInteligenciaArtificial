@@ -5,10 +5,11 @@ from evaluacion import evaluate_model
 from keras.optimizers import SGD, RMSprop, Adam, Lamb
 from keras.regularizers import l1, l2
 import pandas as pd
-import time
+
 # Debido a un error de CUDA (asociado a la GPU), solo se utiliza le CPU para los ajustes del modelo.
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+
 
 # Cargar y preprocesar los datos de Telco Customer Churn
 X_train, X_test, y_train, y_test = load_and_preprocess_data('WA_Fn-UseC_-Telco-Customer-Churn.csv')
@@ -68,18 +69,10 @@ for nombre_reg, regularizador in regularizadoresPropios.items():
         model = construir_modelo(input_dim=numero_caracteristicas, regularizer_instance = regularizador)
         
         # Entrenar el modelo con los datos de entrenamiento y validación
-        model.compile(optimizer=optimizador, loss='binary_crossentropy', metrics=['accuracy'])
-        start_time = time.time()
-        history = model.fit(X_train, y_train, 
-                            epochs=50, 
-                            batch_size=32,
-                            validation_data=(X_test, y_test),
-                            verbose=0)
-        end_time = time.time()
+        history, tiempo_entrenamiento = train_model(model, X_train, y_train, optimizador, X_test, y_test, )
         
-        # Obtener la pérdida final del entrenamiento y validación
-        final_train_loss = history.history['loss'][-1]
-        final_val_loss = history.history['val_loss'][-1]
+        # Imprimir el resumen del modelo
+        model.summary()
         
         # Evaluar el modelo
         resultados_evaluacion = evaluate_model(model, X_test, y_test)
@@ -88,15 +81,11 @@ for nombre_reg, regularizador in regularizadoresPropios.items():
         results.append({
             'Regularizador': nombre_reg,
             'Algoritmo optimizacion': nombre_opt,
-            'Train Loss': final_train_loss,
-            'Validation Loss': final_val_loss,
+            'Train Loss': history.history['loss'][-1],
+            'Validation Loss': history.history['val_loss'][-1],
             'Test Loss': resultados_evaluacion['loss_test'], 
             'Test Accuracy': resultados_evaluacion['accuracy_test'],
-            'Precision': resultados_evaluacion['Precision'], 
-            'Recall': resultados_evaluacion['Recall'], 
-            'F1_score': resultados_evaluacion['F1_score'], 
-            'ROC_AUC': resultados_evaluacion['roc_auc'], 
-            'Training Time (s)': end_time - start_time
+            'Training Time (s)': tiempo_entrenamiento
         })
 
 # Convertir los resultados a un DataFrame de pandas para una mejor visualización

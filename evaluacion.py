@@ -1,4 +1,4 @@
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score 
+from sklearn.metrics import precision_score, recall_score, f1_score, roc_auc_score 
 
 def evaluate_model(model, X_test, y_test):
     loss, accuracy = model.evaluate(X_test, y_test, verbose=0)

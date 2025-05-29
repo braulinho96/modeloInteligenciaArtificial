@@ -1,37 +1,27 @@
 from procesamiento_datos import load_and_preprocess_data
-from definir_modelo import construir_modelo, RegularizadorL1, RegularizadorL2
+from definir_modelo import construir_modelo, SmoothedAbs, RoundedSquare, ContrastRegularizer, EntropyLikeRegularizer, VarianceSuppression                                          
 from entrenamiento import train_model
 from evaluacion import evaluate_model
 from keras.optimizers import SGD, RMSprop, Adam, Lamb
-from keras.regularizers import l1, l2
 import pandas as pd
+import matplotlib.pyplot as plt
 
 # Debido a un error de CUDA (asociado a la GPU), solo se utiliza le CPU para los ajustes del modelo.
-import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
-
+#import os
+#os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 # Cargar y preprocesar los datos de Telco Customer Churn
 X_train, X_test, y_train, y_test = load_and_preprocess_data('mushrooms.csv')
-
-# Definir funciones de penalización integradas de Keras, para comparar con las personalizadas
-# L1: Penalizacion de Lasso: penaliza la suma de los valores absolutos de los pesos, provoca que # algunos pesos se vuelvan exactamente cero, 
-#   lo que puede ser útil para la selección de características y eliminación de ruido. Elimina características, 
-#   pero puede provocar que el modelo no aprenda bien si se usa con demasiada fuerza.
-
-# L2: Penalizacion de Ridge: penaliza la suma de los cuadrados de los pesos, provoca que los pesos se vuelvan pequeños, pero no exactamente cero,
-#   lo que puede ser útil para evitar el sobreajuste y mejorar la generalización del modelo. No elimina características, pero las reduce.
-regularizador = {
-    'L1': l1(0.001),
-    'L2': l2(0.001)
-}
 
 # Definir regularizadores personalizados
 # Se define un lambda para la regularización, que controla la fuerza de la penalización
 lambdaRegularizador = 0.001
 regularizadoresPropios = {
-    'L1': RegularizadorL1(lmbd=lambdaRegularizador),
-    'L2': RegularizadorL2(lmbd=lambdaRegularizador)
+    'SmoothedAbs': SmoothedAbs(lmbd=lambdaRegularizador),
+    'RoundedSquare': RoundedSquare(lmbd=lambdaRegularizador),
+    'Contrast': ContrastRegularizer(lmbd=lambdaRegularizador),
+    'EntropyLike': EntropyLikeRegularizer(lmbd=lambdaRegularizador),
+    'VarianceSuppression': VarianceSuppression(lmbd=lambdaRegularizador)
 }
 
 # Lista para almacenar los resultados
@@ -62,6 +52,8 @@ for nombre_reg, regularizador in regularizadoresPropios.items():
         'Lamb': Lamb(learning_rate=0.001)  
         }
     
+    # Se crea una figura para graficar la precisión de validación
+    plt.figure(figsize=(10, 6))
     
     for nombre_opt, optimizador in algoritmos_optimizacion.items():
         print(f'\nEntrenando con optimizador: {nombre_opt} y regularización: {nombre_reg}')
@@ -108,16 +100,25 @@ for nombre_reg, regularizador in regularizadoresPropios.items():
         print(f"✔ {nombre_reg} + {nombre_opt} → Acc: {res['Test Accuracy']:.4f}, F1: {res['F1_score']:.4f}, AUC: {res['ROC_AUC']:.4f}")
         results.append(res)
 
+        # Grafica la precisión de validación para cada regularizador en el grafico
+        plt.plot(history.history['val_accuracy'], label= "{} + {}".format(nombre_reg, nombre_opt))
+    
+    # Finalizar la gráfica de precisión de validación para el regularizador actual con cada optimizador
+    plt.title(f'Precisión de Validación - {nombre_reg}')
+    plt.xlabel('Épocas')
+    plt.ylabel('Precisión de Validación')
+    plt.legend()
+    plt.grid(True)
+    nombre_archivo = f'{nombre_reg}_precisionValidacion.png'
+    plt.savefig(nombre_archivo, dpi=300)
+    plt.close()
 
 # Convertir los resultados a un DataFrame de pandas para una mejor visualización
 results_df = pd.DataFrame(results)
 print("\n--- Tabla de Resultados Numéricos ---")
 print(results_df.round(4).to_string())
 
-
-# Visualización del tiempo de entrenamiento
-import matplotlib.pyplot as plt
-
+# Graficar el tiempo de entrenamiento por combinación de modelo
 # Crear etiquetas combinadas para el eje x
 results_df['Combinación'] = results_df['Algoritmo optimizacion'] + " (" + results_df['Regularizador'] + ")"
 combinaciones = results_df['Combinación']

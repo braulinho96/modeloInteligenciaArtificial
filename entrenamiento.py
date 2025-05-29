@@ -1,8 +1,6 @@
 import time
 
-def train_model(model, X_train, y_train, optimizer, X_test, y_test):
-    # Compila y entrena el modelo con los datos de entrenamiento y validación
-    """
+"""
     Entrena el modelo con los datos de entrenamiento y validación.
     Args:
         model: Modelo de Keras a entrenar.
@@ -15,7 +13,8 @@ def train_model(model, X_train, y_train, optimizer, X_test, y_test):
         history: Historial del entrenamiento.
         tiempo_entrenamiento: Tiempo total de entrenamiento en segundos.
     """
-    
+def train_model(model, X_train, y_train, optimizer, X_test, y_test):
+    # Compila y entrena el modelo con los datos de entrenamiento y validación
     # Compile es una funcion de Keras que prepara el modelo para el entrenamiento.
     #   optimizer: Algoritmo de optimización a utilizar (SGD, RMSprop, Adam, Lamb).
     #   loss: Función de pérdida a minimizar durante el entrenamiento (binary_crossentropy para clasificación binaria).

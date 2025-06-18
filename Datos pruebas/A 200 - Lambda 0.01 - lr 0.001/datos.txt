@@ -1,0 +1,33 @@
+--- Tabla de Resultados Numéricos ---
+                   Regularizador Algoritmo optimizacion    Train Loss  Validation Loss    Test Loss  Test Accuracy  Precision  Recall  F1_score  ROC_AUC  Training Time (s)
+0      WeightOscillationDampener                    SGD  2.959000e-01           0.2955       0.2955         1.0000     1.0000  1.0000    1.0000   1.0000           101.4205
+1      WeightOscillationDampener                RMSprop  4.000000e-03           0.0041       0.0041         1.0000     1.0000  1.0000    1.0000   1.0000           106.4489
+2      WeightOscillationDampener                   Adam  3.500000e-03           0.0034       0.0034         1.0000     1.0000  1.0000    1.0000   1.0000           114.4342
+3      WeightOscillationDampener                   Lamb  2.200000e-03           0.0004       0.0004         1.0000     1.0000  1.0000    1.0000   1.0000           110.8603
+4       MinimalEnergyRegularizer                    SGD  1.410000e-02           0.0144       0.0144         1.0000     1.0000  1.0000    1.0000   1.0000           100.2346
+5       MinimalEnergyRegularizer                RMSprop  0.000000e+00           0.0000       0.0000         1.0000     1.0000  1.0000    1.0000   1.0000           104.7492
+6       MinimalEnergyRegularizer                   Adam  0.000000e+00           0.0000       0.0000         1.0000     1.0000  1.0000    1.0000   1.0000           105.9856
+7       MinimalEnergyRegularizer                   Lamb  0.000000e+00           0.0000       0.0000         1.0000     1.0000  1.0000    1.0000   1.0000           112.9293
+8      CenteredWeightRegularizer                    SGD  4.747000e-01           0.4734       0.4734         1.0000     1.0000  1.0000    1.0000   1.0000           100.2566
+9      CenteredWeightRegularizer                RMSprop  2.590000e-02           0.0187       0.0187         1.0000     1.0000  1.0000    1.0000   1.0000           103.7975
+10     CenteredWeightRegularizer                   Adam  1.630000e-02           0.0161       0.0161         1.0000     1.0000  1.0000    1.0000   1.0000           105.2645
+11     CenteredWeightRegularizer                   Lamb  2.230000e-02           0.0095       0.0095         1.0000     1.0000  1.0000    1.0000   1.0000           109.4644
+12  EntropyLikeWeightRegularizer                    SGD  1.640000e-01           0.1639       0.1639         1.0000     1.0000  1.0000    1.0000   1.0000           105.8239
+13  EntropyLikeWeightRegularizer                RMSprop  5.780000e-02           0.0577       0.0577         1.0000     1.0000  1.0000    1.0000   1.0000           104.6587
+14  EntropyLikeWeightRegularizer                   Adam  4.710000e-02           0.0471       0.0471         1.0000     1.0000  1.0000    1.0000   1.0000           106.8021
+15  EntropyLikeWeightRegularizer                   Lamb  6.284033e+13           0.8239       0.8239         0.5188     0.0000  0.0000    0.0000   0.5000           109.8246
+16     AntiSaturationRegularizer                    SGD  9.043140e+01          90.4163      90.4163         1.0000     1.0000  1.0000    1.0000   1.0000           100.2516
+17     AntiSaturationRegularizer                RMSprop  1.157900e+00           2.5234       2.5234         0.9975     0.9974  0.9974    0.9974   0.9981           108.1793
+18     AntiSaturationRegularizer                   Adam  2.078600e+00           2.2635       2.2635         0.9988     0.9987  0.9987    0.9987   0.9988           116.8220
+19     AntiSaturationRegularizer                   Lamb  1.568409e+06      371455.2188  371455.2188         0.9994     0.9987  1.0000    0.9994   0.9994           112.9177
+20        SparseGroupRegularizer                    SGD  1.563000e-01           0.1553       0.1553         1.0000     1.0000  1.0000    1.0000   1.0000            99.9466
+21        SparseGroupRegularizer                RMSprop  8.900000e-03           0.0090       0.0090         1.0000     1.0000  1.0000    1.0000   1.0000           104.8378
+22        SparseGroupRegularizer                   Adam  8.300000e-03           0.0081       0.0081         1.0000     1.0000  1.0000    1.0000   1.0000           105.3118
+23        SparseGroupRegularizer                   Lamb  8.000000e-04           0.0008       0.0008         1.0000     1.0000  1.0000    1.0000   1.0000           110.0328
+24    LayerSmoothnessRegularizer                    SGD  1.385000e-01           0.1384       0.1384         1.0000     1.0000  1.0000    1.0000   1.0000           103.2386
+25    LayerSmoothnessRegularizer                RMSprop  3.420000e-02           0.0348       0.0348         0.9994     1.0000  0.9987    0.9994   0.9988           105.3798
+26    LayerSmoothnessRegularizer                   Adam  8.900000e-03           0.0095       0.0095         1.0000     1.0000  1.0000    1.0000   1.0000           109.1106
+27    LayerSmoothnessRegularizer                   Lamb  4.800000e-03           0.0023       0.0023         1.0000     1.0000  1.0000    1.0000   1.0000           109.5763
+
+--- Resumen de Tiempos de Entrenamiento ---
+Modelo más rápido: SGD (SparseGroupRegularizer) - Tiempo: 99.95 segundos

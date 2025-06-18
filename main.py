@@ -1,5 +1,5 @@
 from procesamiento_datos import load_and_preprocess_data
-from definir_modelo import construir_modelo, SmoothedAbs, RoundedSquare, EntropyLikeRegularizer, VarianceSuppression, TangentRegularizer                                        
+from definir_modelo import construir_modelo, SmoothedAbs, RoundedSquare, VarianceSuppression, CosineRegularizer, MaxPenaltyRegularizer, SmoothStepRegularizer, WeightOscillationDampener, MinimalEnergyRegularizer, CenteredWeightRegularizer, EntropyLikeWeightRegularizer, AntiSaturationRegularizer, SparseGroupRegularizer, LayerSmoothnessRegularizer                                 
 from entrenamiento import train_model
 from evaluacion import evaluate_model
 from keras.optimizers import SGD, RMSprop, Adam, Lamb
@@ -10,8 +10,9 @@ import matplotlib.pyplot as plt
 import random 
 import numpy as np 
 import tensorflow as tf 
+# 42 -31 -12
+SEED = 12
 
-SEED = 42 
 random.seed(SEED)
 np.random.seed(SEED)
 tf.random.set_seed(SEED)
@@ -23,10 +24,20 @@ X_train, X_test, y_train, y_test = load_and_preprocess_data('mushrooms.csv')
 lambdaRegularizador = 0.01
 regularizadoresPropios = {
     #'SmoothedAbs': SmoothedAbs(lmbd=lambdaRegularizador),
-    'RoundedSquare': RoundedSquare(lmbd=lambdaRegularizador)
-    #'EntropyLike': EntropyLikeRegularizer(lmbd=lambdaRegularizador),
-    #'Tangent': TangentRegularizer(lmbd=lambdaRegularizador), 
-    #'VarianceSuppression': VarianceSuppression(lmbd=lambdaRegularizador)
+    #'RoundedSquare': RoundedSquare(lmbd=lambdaRegularizador),
+    'VarianceSuppression': VarianceSuppression(lmbd=lambdaRegularizador),
+    #'CosineRegularizer': CosineRegularizer(lmbd=lambdaRegularizador),
+    'MaxPenaltyRegularizer': MaxPenaltyRegularizer(lmbd=lambdaRegularizador)
+    #'SmoothStepRegularizer': SmoothStepRegularizer(lmbd=lambdaRegularizador),
+
+    #'WeightOscillationDampener': WeightOscillationDampener(lmbd=lambdaRegularizador),
+    #'MinimalEnergyRegularizer': MinimalEnergyRegularizer(lmbd=lambdaRegularizador),
+    #'CenteredWeightRegularizer': CenteredWeightRegularizer(lmbd=lambdaRegularizador, center=0.1),
+    #'EntropyLikeWeightRegularizer': EntropyLikeWeightRegularizer(lmbd=lambdaRegularizador, epsilon=1e-7),
+    #'AntiSaturationRegularizer': AntiSaturationRegularizer(lmbd=lambdaRegularizador),
+    #'SparseGroupRegularizer': SparseGroupRegularizer(lmbd=lambdaRegularizador),
+    #'LayerSmoothnessRegularizer': LayerSmoothnessRegularizer(lmbd=lambdaRegularizador)
+
 }
 
 # Lista para almacenar los resultados
@@ -37,10 +48,10 @@ numero_caracteristicas = X_train.shape[1]
 for nombre_reg, regularizador in regularizadoresPropios.items():
     # Definir los algoritmos de optimización a utilizar y sus parámetros de aprendizaje
     algoritmos_optimizacion = {
-        'SGD': SGD(learning_rate=0.001)
-        #'RMSprop': RMSprop(learning_rate=0.001),
-        #'Adam': Adam(learning_rate=0.001),
-        #'Lamb': Lamb(learning_rate=0.001)  
+        'SGD': SGD(learning_rate=0.001),
+        'RMSprop': RMSprop(learning_rate=0.001),
+        'Adam': Adam(learning_rate=0.001),
+        'Lamb': Lamb(learning_rate=0.001)  
         }
     
     # Se crea una figura para graficar la precisión de validación para cada combinación de regularizador y optimizador

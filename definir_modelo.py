@@ -12,7 +12,7 @@ from keras.regularizers import Regularizer
 # Penaliza pesos grandes, pero con una transición más suave.
 # Ventaja: Evita explosiones de gradiente cerca de 0 y es útil para mantener algunos pesos pequeños sin hacerlos exactamente cero.
 class SmoothedAbs(Regularizer):
-    def __init__(self, lmbd=0.01, epsilon=1e-4):
+    def __init__(self, lmbd=0.001, epsilon=1e-4):
         self.lmbd = lmbd
         self.epsilon = epsilon
 
@@ -27,7 +27,7 @@ class SmoothedAbs(Regularizer):
 # Esto impide que los pesos con valores grandes sean castigados excesivamente.
 # Ventaja: Previene que el modelo evite completamente pesos grandes si son necesarios, protegiendo la capacidad de aprendizaje en algunas neuronas.
 class RoundedSquare(Regularizer):
-    def __init__(self, lmbd=0.01, max_val=5.0):
+    def __init__(self, lmbd=0.001, max_val=5.0):
         self.lmbd = lmbd
         self.max_val = max_val
 
@@ -39,45 +39,13 @@ class RoundedSquare(Regularizer):
     def get_config(self):
         return {'lmbd': self.lmbd, 'max_val': self.max_val}
     
-# Contrast Regularizer
-# Penaliza valores intermedios de los pesos (cerca de 0.5 en módulo).
-# El producto |x|(1 - |x|) tiene su pico en |x| = 0.5 y cae a 0 cuando x se acerca a 0 o 1.
-# Fomenta pesos más binarios o extremos.
-# Ventaja: Muy útil en modelos con muchas variables dummy (como los que salen de one-hot), ya que empuja al modelo a tomar decisiones firmes (activa o desactiva neuronas).
-class ContrastRegularizer(Regularizer):
-    def __init__(self, lmbd=0.01):
-        self.lmbd = lmbd
-
-    def __call__(self, x):
-        return self.lmbd * tf.reduce_sum(tf.abs(x) * (1 - tf.abs(x)))
-
-    def get_config(self):
-        return {'lmbd': self.lmbd}
-    
-# Entropy-like Regularizer
-# Inspirada en la entropía binaria.
-# Penaliza valores de peso cercanos a 0.5 (alta incertidumbre).
-# Empuja a que los pesos estén más cerca de 0 o 1, reduciendo la ambigüedad.
-# Ventaja: Ideal para mejorar la interpretabilidad y evitar pesos indecisos, promoviendo una estructura más clara.
-class EntropyLikeRegularizer(Regularizer):
-    def __init__(self, lmbd=0.01, epsilon=1e-5):
-        self.lmbd = lmbd
-        self.epsilon = epsilon
-
-    def __call__(self, x):
-        x = tf.clip_by_value((x + 1) / 2, self.epsilon, 1 - self.epsilon)  # escala [-1,1] a [0,1]
-        return -self.lmbd * tf.reduce_sum(x * tf.math.log(x) + (1 - x) * tf.math.log(1 - x))
-
-    def get_config(self):
-        return {'lmbd': self.lmbd, 'epsilon': self.epsilon}
-
 # Variance Suppression Regularizer
 # Penaliza la varianza entre los pesos.
 # Intenta hacer que los pesos de una capa estén más uniformes entre sí.
 # No busca reducir su valor absoluto, sino armonizar su dispersión.
 # Ventaja: Útil para evitar que ciertas conexiones dominen la red y para inducir una regularización colectiva más equilibrada.
 class VarianceSuppression(Regularizer):
-    def __init__(self, lmbd=0.01):
+    def __init__(self, lmbd=0.001):
         self.lmbd = lmbd
 
     def __call__(self, x):
@@ -86,6 +54,118 @@ class VarianceSuppression(Regularizer):
 
     def get_config(self):
         return {'lmbd': self.lmbd}
+    
+class CosineRegularizer(Regularizer):
+    def __init__(self, lmbd=0.001):
+        self.lmbd = lmbd
+
+    def __call__(self, x):
+        return self.lmbd * tf.reduce_sum(1.0 - tf.cos(x))
+
+    def get_config(self):
+        return {'lmbd': self.lmbd}
+
+class MaxPenaltyRegularizer(Regularizer):
+    def __init__(self, lmbd=0.001):
+        self.lmbd = lmbd
+
+    def __call__(self, x):
+        return self.lmbd * tf.reduce_max(tf.abs(x))
+
+    def get_config(self):
+        return {'lmbd': self.lmbd}
+
+class SmoothStepRegularizer(Regularizer):
+    def __init__(self, lmbd=0.001):
+        self.lmbd = lmbd
+
+    def __call__(self, x):
+        smooth_step = tf.pow(x, 2) * (3 - 2 * tf.abs(x))  # Suave entre -1 y 1
+        return self.lmbd * tf.reduce_sum(smooth_step)
+
+    def get_config(self):
+        return {'lmbd': self.lmbd}
+
+# ----------------------------------------------------
+class WeightOscillationDampener(Regularizer):
+    def __init__(self, lmbd=0.001):
+        self.lmbd = lmbd
+
+    def __call__(self, x):
+        return self.lmbd * tf.reduce_sum(tf.square(tf.sin(x)))
+
+    def get_config(self):
+        return {'lmbd': self.lmbd}
+
+class MinimalEnergyRegularizer(Regularizer):
+    def __init__(self, lmbd=0.001, target_energy=1.0):
+        self.lmbd = lmbd
+        self.target_energy = target_energy
+
+    def __call__(self, x):
+        energy = tf.reduce_sum(tf.square(x))
+        return self.lmbd * tf.square(energy - self.target_energy)
+
+    def get_config(self):
+        return {'lmbd': self.lmbd, 'target_energy': self.target_energy}
+
+class CenteredWeightRegularizer(Regularizer):
+    def __init__(self, lmbd=0.001, center=0.1):
+        self.lmbd = lmbd
+        self.center = center
+
+    def __call__(self, x):
+        return self.lmbd * tf.reduce_sum(tf.square(x - self.center))
+
+    def get_config(self):
+        return {'lmbd': self.lmbd, 'center': self.center}
+
+class EntropyLikeWeightRegularizer(Regularizer):
+    def __init__(self, lmbd=0.001, epsilon=1e-7):
+        self.lmbd = lmbd
+        self.epsilon = epsilon
+
+    def __call__(self, x):
+        abs_x = tf.abs(x)
+        probs = abs_x / (tf.reduce_sum(abs_x) + self.epsilon)
+        entropy = -tf.reduce_sum(probs * tf.math.log(probs + self.epsilon))
+        return self.lmbd * entropy
+
+    def get_config(self):
+        return {'lmbd': self.lmbd, 'epsilon': self.epsilon}
+
+class AntiSaturationRegularizer(Regularizer):
+    def __init__(self, lmbd=0.001):
+        self.lmbd = lmbd
+
+    def __call__(self, x):
+        return self.lmbd * tf.reduce_sum(1.0 / (1.0 + tf.square(x)))
+
+    def get_config(self):
+        return {'lmbd': self.lmbd}
+
+class SparseGroupRegularizer(Regularizer):
+    def __init__(self, lmbd=0.001):
+        self.lmbd = lmbd
+
+    def __call__(self, x):
+        group_norm = tf.sqrt(tf.reduce_sum(tf.square(x)))
+        return self.lmbd * group_norm
+
+    def get_config(self):
+        return {'lmbd': self.lmbd}
+
+class LayerSmoothnessRegularizer(Regularizer):
+    def __init__(self, lmbd=0.001):
+        self.lmbd = lmbd
+
+    def __call__(self, x):
+        diff = x[1:] - x[:-1]
+        return self.lmbd * tf.reduce_sum(tf.square(diff))
+
+    def get_config(self):
+        return {'lmbd': self.lmbd}
+
 
 # Definición del modelo de Keras con regularización personalizada
 # Se define una función que construye el modelo con las capas y se le aplican los regularizadores personalizados

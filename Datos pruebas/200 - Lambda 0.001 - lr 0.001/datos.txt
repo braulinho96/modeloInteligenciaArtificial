@@ -1,0 +1,34 @@
+--- Tabla de Resultados Numéricos ---
+                  Regularizador Algoritmo optimizacion    Train Loss  Validation Loss  Test Loss  Test Accuracy  Precision  Recall  F1_score  ROC_AUC  Training Time (s)  
+0                   SmoothedAbs                    SGD  6.482000e-01           0.6477     0.6477         1.0000     1.0000  1.0000    1.0000   1.0000           118.0787  
+1                   SmoothedAbs                RMSprop  9.910000e-02           0.0994     0.0994         1.0000     1.0000  1.0000    1.0000   1.0000           119.1591  
+2                   SmoothedAbs                   Adam  9.840000e-02           0.0983     0.0983         1.0000     1.0000  1.0000    1.0000   1.0000           117.0406  
+3                   SmoothedAbs                   Lamb  9.560000e-02           0.0956     0.0956         1.0000     1.0000  1.0000    1.0000   1.0000           118.7081  
+4                 RoundedSquare                    SGD  1.141000e-01           0.1146     0.1146         1.0000     1.0000  1.0000    1.0000   1.0000           107.0850  
+5                 RoundedSquare                RMSprop  1.200000e-03           0.0010     0.0010         1.0000     1.0000  1.0000    1.0000   1.0000           121.4558  
+6                 RoundedSquare                   Adam  7.000000e-04           0.0007     0.0007         1.0000     1.0000  1.0000    1.0000   1.0000           119.0507  
+7                 RoundedSquare                   Lamb  4.400000e-03           0.0000     0.0000         1.0000     1.0000  1.0000    1.0000   1.0000           119.3671  
+8           VarianceSuppression                    SGD  1.600000e-03           0.0017     0.0017         1.0000     1.0000  1.0000    1.0000   1.0000           106.0471  
+9           VarianceSuppression                RMSprop  0.000000e+00           0.0000     0.0000         1.0000     1.0000  1.0000    1.0000   1.0000           117.7463  
+10          VarianceSuppression                   Adam  0.000000e+00           0.0000     0.0000         1.0000     1.0000  1.0000    1.0000   1.0000           115.5162  
+11          VarianceSuppression                   Lamb  5.000000e-04           0.0000     0.0000         1.0000     1.0000  1.0000    1.0000   1.0000           118.3566  
+12  InverseMagnitudeRegularizer                    SGD  1.907640e+01          19.0605    19.0605         0.9982     0.9987  0.9974    0.9981   0.9998           113.5898  
+13  InverseMagnitudeRegularizer                RMSprop  1.812600e+00           4.0607     4.0607         0.9840     0.9773  0.9898    0.9835   0.9877           116.5212  
+14  InverseMagnitudeRegularizer                   Adam  2.570200e+00           2.6244     2.6244         0.9969     0.9949  0.9987    0.9968   0.9988           116.6247  
+15  InverseMagnitudeRegularizer                   Lamb  6.641967e+06           0.0019     0.0019         1.0000     1.0000  1.0000    1.0000   1.0000           119.3205  
+16            CosineRegularizer                    SGD  6.140000e-02           0.0619     0.0619         1.0000     1.0000  1.0000    1.0000   1.0000           110.7549  
+17            CosineRegularizer                RMSprop  6.000000e-04           0.0006     0.0006         1.0000     1.0000  1.0000    1.0000   1.0000           119.1919  
+18            CosineRegularizer                   Adam  5.000000e-04           0.0005     0.0005         1.0000     1.0000  1.0000    1.0000   1.0000           118.0730  
+19            CosineRegularizer                   Lamb  0.000000e+00           0.0000     0.0000         1.0000     1.0000  1.0000    1.0000   1.0000           119.5868  
+20        MaxPenaltyRegularizer                    SGD  3.800000e-03           0.0027     0.0027         1.0000     1.0000  1.0000    1.0000   1.0000           115.0742  
+21        MaxPenaltyRegularizer                RMSprop  3.000000e-04           0.0003     0.0003         1.0000     1.0000  1.0000    1.0000   1.0000           116.9902  
+22        MaxPenaltyRegularizer                   Adam  2.000000e-04           0.0002     0.0002         1.0000     1.0000  1.0000    1.0000   1.0000           116.5315    
+23        MaxPenaltyRegularizer                   Lamb  0.000000e+00           0.0000     0.0000         1.0000     1.0000  1.0000    1.0000   1.0000           118.3215
+24        SmoothStepRegularizer                    SGD  2.467000e-01           0.2469     0.2469         1.0000     1.0000  1.0000    1.0000   1.0000           113.5761
+25        SmoothStepRegularizer                RMSprop  1.700000e-03           0.0017     0.0017         1.0000     1.0000  1.0000    1.0000   1.0000           116.6103
+26        SmoothStepRegularizer                   Adam  1.500000e-03           0.0013     0.0013         1.0000     1.0000  1.0000    1.0000   1.0000           117.3833
+27        SmoothStepRegularizer                   Lamb  2.400000e-03           0.0000     0.0000         1.0000     1.0000  1.0000    1.0000   1.0000           120.2198
+
+--- Resumen de Tiempos de Entrenamiento ---
+Modelo más rápido: SGD (VarianceSuppression) - Tiempo: 106.05 segundos
+

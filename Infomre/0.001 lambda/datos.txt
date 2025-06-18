@@ -1,0 +1,13 @@
+--- Tabla de Resultados Numéricos ---
+           Regularizador Algoritmo optimizacion  Train Loss  Validation Loss  Test Loss  Test Accuracy  Precision  Recall  F1_score  ROC_AUC  Training Time (s)
+0    VarianceSuppression                    SGD      0.0028           0.0022     0.0022            1.0        1.0     1.0       1.0      1.0           112.9284
+1    VarianceSuppression                RMSprop      0.0000           0.0000     0.0000            1.0        1.0     1.0       1.0      1.0           118.5412
+2    VarianceSuppression                   Adam      0.0000           0.0000     0.0000            1.0        1.0     1.0       1.0      1.0           117.2968
+3    VarianceSuppression                   Lamb      0.0000           0.0000     0.0000            1.0        1.0     1.0       1.0      1.0           119.9818
+4  MaxPenaltyRegularizer                    SGD      0.0033           0.0031     0.0031            1.0        1.0     1.0       1.0      1.0           115.8938
+5  MaxPenaltyRegularizer                RMSprop      0.0003           0.0003     0.0003            1.0        1.0     1.0       1.0      1.0           119.0430
+6  MaxPenaltyRegularizer                   Adam      0.0001           0.0001     0.0001            1.0        1.0     1.0       1.0      1.0           118.2436
+7  MaxPenaltyRegularizer                   Lamb      0.0000           0.0000     0.0000            1.0        1.0     1.0       1.0      1.0           118.5709
+
+--- Resumen de Tiempos de Entrenamiento ---
+Modelo más rápido: SGD (VarianceSuppression) - Tiempo: 112.93 segundos

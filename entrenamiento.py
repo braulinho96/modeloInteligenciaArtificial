@@ -23,7 +23,7 @@ def train_model(model, X_train, y_train, optimizer, X_test, y_test):
     model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
     start_time = time.time()
     history = model.fit(X_train, y_train, 
-                        epochs=50, 
+                        epochs=200,  
                         batch_size=32,
                         validation_data=(X_test, y_test),
                         verbose=0)

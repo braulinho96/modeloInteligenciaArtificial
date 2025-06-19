@@ -44,6 +44,8 @@ class RoundedSquare(Regularizer):
 # Intenta hacer que los pesos de una capa estén más uniformes entre sí.
 # No busca reducir su valor absoluto, sino armonizar su dispersión.
 # Ventaja: Útil para evitar que ciertas conexiones dominen la red y para inducir una regularización colectiva más equilibrada.
+# Desventaja: Puede ser menos efectivo si los pesos necesitan variar ampliamente para capturar la complejidad de los datos.
+
 class VarianceSuppression(Regularizer):
     def __init__(self, lmbd=0.001):
         self.lmbd = lmbd
@@ -54,7 +56,13 @@ class VarianceSuppression(Regularizer):
 
     def get_config(self):
         return {'lmbd': self.lmbd}
-    
+
+# Cosine Regularizer
+# Penaliza la diferencia entre los pesos y un valor de referencia, utilizando una función coseno.
+# Esto puede ayudar a mantener los pesos en un rango deseado y evitar que se desvíen demasiado.
+# Ventaja: Ayuda a mantener los pesos cerca de un valor central, lo que puede ser útil en ciertos contextos donde se espera que los pesos tengan una distribución específica.
+# Desventaja: Puede ser menos efectivo si los pesos necesitan variar ampliamente para capturar la complejidad de los datos.
+
 class CosineRegularizer(Regularizer):
     def __init__(self, lmbd=0.001):
         self.lmbd = lmbd
@@ -65,6 +73,11 @@ class CosineRegularizer(Regularizer):
     def get_config(self):
         return {'lmbd': self.lmbd}
 
+# Max Penalty Regularizer
+# Penaliza el valor máximo absoluto de los pesos.
+# Esto puede ayudar a evitar que algunos pesos se vuelvan excesivamente grandes, lo que podría causar problemas de estabilidad en el entrenamiento.
+# # Ventaja: Ayuda a controlar los pesos más grandes, lo que puede ser útil para evitar problemas de sobreajuste o inestabilidad en el entrenamiento.
+# # Desventaja: Puede ser menos efectivo si los pesos necesitan variar ampliamente para capturar la complejidad de los datos.
 class MaxPenaltyRegularizer(Regularizer):
     def __init__(self, lmbd=0.001):
         self.lmbd = lmbd
@@ -97,6 +110,12 @@ class WeightOscillationDampener(Regularizer):
     def get_config(self):
         return {'lmbd': self.lmbd}
 
+# Minimal Energy Regularizer
+# Penaliza la energía total de los pesos, buscando mantenerla cerca de un valor objetivo.
+# Esto puede ayudar a evitar que los pesos se vuelvan excesivamente grandes, lo que podría causar problemas de estabilidad en el entrenamiento.
+# # Ventaja: Ayuda a controlar la energía total de los pesos, lo que puede ser útil para evitar problemas de sobreajuste o inestabilidad en el entrenamiento.
+# # Desventaja: Puede ser menos efectivo si los pesos necesitan variar ampliamente para capturar la complejidad de los datos.
+
 class MinimalEnergyRegularizer(Regularizer):
     def __init__(self, lmbd=0.001, target_energy=1.0):
         self.lmbd = lmbd
@@ -109,6 +128,15 @@ class MinimalEnergyRegularizer(Regularizer):
     def get_config(self):
         return {'lmbd': self.lmbd, 'target_energy': self.target_energy}
 
+# Regularizers that focus on specific properties of weights, such as centering, entropy, anti-saturation, sparsity, and smoothness.
+# These regularizers are designed to encourage certain behaviors in the model weights, such as being close to a center value, having low entropy, avoiding saturation, promoting sparsity, or ensuring smoothness across layers.
+# These regularizers can help improve model generalization and stability during training.
+# # Centered Weight Regularizer
+# Penaliza los pesos que se alejan de un valor central específico.
+# Esto puede ser útil para mantener los pesos en un rango deseado y evitar que se desvíen demasiado.
+# Ventaja: Ayuda a mantener los pesos cerca de un valor central, lo que puede ser útil en ciertos contextos donde se espera que los pesos tengan una distribución específica.
+# Desventaja: Puede ser menos efectivo si los pesos necesitan variar ampliamente para capturar la complejidad de los datos.
+
 class CenteredWeightRegularizer(Regularizer):
     def __init__(self, lmbd=0.001, center=0.1):
         self.lmbd = lmbd
@@ -119,6 +147,12 @@ class CenteredWeightRegularizer(Regularizer):
 
     def get_config(self):
         return {'lmbd': self.lmbd, 'center': self.center}
+
+# Entropy-like Weight Regularizer
+# Penaliza la entropía de los pesos, promoviendo una distribución más uniforme.
+# Esto puede ayudar a evitar que algunos pesos dominen la red y a promover una mayor diversidad en las representaciones aprendidas.
+# Ventaja: Fomenta una distribución más uniforme de los pesos, lo que puede mejorar la generalización del modelo.
+# Desventaja: Puede ser menos efectivo si los pesos necesitan concentrarse en ciertas características específicas de los datos.
 
 class EntropyLikeWeightRegularizer(Regularizer):
     def __init__(self, lmbd=0.001, epsilon=1e-7):

@@ -1,0 +1,87 @@
+Variable: cap-shape
+Chi-cuadrado = 489.9200, p-valor = 0.0000000, grados de libertad = 5
+↳ Existe una asociación significativa con la clase.
+
+Variable: cap-surface
+Chi-cuadrado = 315.0428, p-valor = 0.0000000, grados de libertad = 3
+↳ Existe una asociación significativa con la clase.
+
+Variable: cap-color
+Chi-cuadrado = 387.5978, p-valor = 0.0000000, grados de libertad = 9
+↳ Existe una asociación significativa con la clase.
+
+Variable: bruises
+Chi-cuadrado = 2041.4156, p-valor = 0.0000000, grados de libertad = 1
+↳ Existe una asociación significativa con la clase.
+
+Variable: odor
+Chi-cuadrado = 7659.7267, p-valor = 0.0000000, grados de libertad = 8
+↳ Existe una asociación significativa con la clase.
+
+Variable: gill-attachment
+Chi-cuadrado = 133.9862, p-valor = 0.0000000, grados de libertad = 1
+↳ Existe una asociación significativa con la clase.
+
+Variable: gill-spacing
+Chi-cuadrado = 984.1433, p-valor = 0.0000000, grados de libertad = 1
+↳ Existe una asociación significativa con la clase.
+
+Variable: gill-size
+Chi-cuadrado = 2366.8343, p-valor = 0.0000000, grados de libertad = 1
+↳ Existe una asociación significativa con la clase.
+
+Variable: gill-color
+Chi-cuadrado = 3765.7141, p-valor = 0.0000000, grados de libertad = 11
+↳ Existe una asociación significativa con la clase.
+
+Variable: stalk-shape
+Chi-cuadrado = 84.1420, p-valor = 0.0000000, grados de libertad = 1
+↳ Existe una asociación significativa con la clase.
+
+Variable: stalk-root
+Chi-cuadrado = 1344.4405, p-valor = 0.0000000, grados de libertad = 4
+↳ Existe una asociación significativa con la clase.
+
+Variable: stalk-surface-above-ring
+Chi-cuadrado = 2808.2863, p-valor = 0.0000000, grados de libertad = 3
+↳ Existe una asociación significativa con la clase.
+
+Variable: stalk-surface-below-ring
+Chi-cuadrado = 2684.4741, p-valor = 0.0000000, grados de libertad = 3
+↳ Existe una asociación significativa con la clase.
+
+Variable: stalk-color-above-ring
+Chi-cuadrado = 2237.8985, p-valor = 0.0000000, grados de libertad = 8
+↳ Existe una asociación significativa con la clase.
+
+Variable: stalk-color-below-ring
+Chi-cuadrado = 2152.3909, p-valor = 0.0000000, grados de libertad = 8
+↳ Existe una asociación significativa con la clase.
+
+Variable: veil-type
+Chi-cuadrado = 0.0000, p-valor = 1.0000000, grados de libertad = 0
+↳ No hay asociación significativa con la clase.
+
+Variable: veil-color
+Chi-cuadrado = 191.2237, p-valor = 0.0000000, grados de libertad = 3
+↳ Existe una asociación significativa con la clase.
+
+Variable: ring-number
+Chi-cuadrado = 374.7368, p-valor = 0.0000000, grados de libertad = 2
+↳ Existe una asociación significativa con la clase.
+
+Variable: ring-type
+Chi-cuadrado = 2956.6193, p-valor = 0.0000000, grados de libertad = 4
+↳ Existe una asociación significativa con la clase.
+
+Variable: spore-print-color
+Chi-cuadrado = 4602.0332, p-valor = 0.0000000, grados de libertad = 8
+↳ Existe una asociación significativa con la clase.
+
+Variable: population
+Chi-cuadrado = 1929.7409, p-valor = 0.0000000, grados de libertad = 5
+↳ Existe una asociación significativa con la clase.
+
+Variable: habitat
+Chi-cuadrado = 1573.7773, p-valor = 0.0000000, grados de libertad = 6
+↳ Existe una asociación significativa con la clase.

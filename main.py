@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import random 
 import numpy as np 
 import tensorflow as tf 
-# 42 -31 -12
+# 42 - 31 -12
 SEED = 12
 
 random.seed(SEED)
@@ -20,8 +20,9 @@ tf.random.set_seed(SEED)
 # Cargar y preprocesar los datos de Telco Customer Churn
 X_train, X_test, y_train, y_test = load_and_preprocess_data('mushrooms.csv')
 
+
 # Definir los regularizadores y sus parámetros
-lambdaRegularizador = 0.01
+lambdaRegularizador = 0.001
 regularizadoresPropios = {
     #'SmoothedAbs': SmoothedAbs(lmbd=lambdaRegularizador),
     #'RoundedSquare': RoundedSquare(lmbd=lambdaRegularizador),
@@ -29,7 +30,6 @@ regularizadoresPropios = {
     #'CosineRegularizer': CosineRegularizer(lmbd=lambdaRegularizador),
     'MaxPenaltyRegularizer': MaxPenaltyRegularizer(lmbd=lambdaRegularizador)
     #'SmoothStepRegularizer': SmoothStepRegularizer(lmbd=lambdaRegularizador),
-
     #'WeightOscillationDampener': WeightOscillationDampener(lmbd=lambdaRegularizador),
     #'MinimalEnergyRegularizer': MinimalEnergyRegularizer(lmbd=lambdaRegularizador),
     #'CenteredWeightRegularizer': CenteredWeightRegularizer(lmbd=lambdaRegularizador, center=0.1),
@@ -37,7 +37,6 @@ regularizadoresPropios = {
     #'AntiSaturationRegularizer': AntiSaturationRegularizer(lmbd=lambdaRegularizador),
     #'SparseGroupRegularizer': SparseGroupRegularizer(lmbd=lambdaRegularizador),
     #'LayerSmoothnessRegularizer': LayerSmoothnessRegularizer(lmbd=lambdaRegularizador)
-
 }
 
 # Lista para almacenar los resultados
@@ -103,8 +102,6 @@ for nombre_reg, regularizador in regularizadoresPropios.items():
         plt.legend()
         plt.grid(True)
         plt.tight_layout()
-
-        # Guarda la imagen dentro de una carpeta imagen
         loss_plot_filename = f'imagenes/loss_{nombre_reg}_{nombre_opt}.png'
         plt.savefig(loss_plot_filename, dpi=300)
         plt.close()

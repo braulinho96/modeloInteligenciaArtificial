@@ -1,51 +1,39 @@
-from procesamiento_datos import load_and_preprocess_data
-from definir_modelo import construir_modelo, SmoothedAbs, RoundedSquare, VarianceSuppression, CosineRegularizer, MaxPenaltyRegularizer, SmoothStepRegularizer, WeightOscillationDampener, MinimalEnergyRegularizer, CenteredWeightRegularizer, EntropyLikeWeightRegularizer, AntiSaturationRegularizer, SparseGroupRegularizer, LayerSmoothnessRegularizer                                 
-from entrenamiento import train_model
-from evaluacion import evaluate_model
+from procesamiento_datos import carga_procesar_datos
+from definir_modelo import construir_modelo, VarianceSuppression, MaxPenaltyRegularizer
+from entrenamiento import entrenar_modelo
+from evaluacion import evaluar_modelo
 from keras.optimizers import SGD, RMSprop, Adam, Lamb
 import pandas as pd
-
 import matplotlib.pyplot as plt
-
 import random 
 import numpy as np 
 import tensorflow as tf 
-# 42 - 31 -12
-SEED = 12
 
+# Configuración de la semilla para reproducibilidad
+SEED = 12
 random.seed(SEED)
 np.random.seed(SEED)
 tf.random.set_seed(SEED)
 
 # Cargar y preprocesar los datos de Telco Customer Churn
-X_train, X_test, y_train, y_test = load_and_preprocess_data('mushrooms.csv')
-
+X_train, X_test, y_train, y_test = carga_procesar_datos('mushrooms.csv')
 
 # Definir los regularizadores y sus parámetros
 lambdaRegularizador = 0.001
 regularizadoresPropios = {
-    #'SmoothedAbs': SmoothedAbs(lmbd=lambdaRegularizador),
-    #'RoundedSquare': RoundedSquare(lmbd=lambdaRegularizador),
     'VarianceSuppression': VarianceSuppression(lmbd=lambdaRegularizador),
-    #'CosineRegularizer': CosineRegularizer(lmbd=lambdaRegularizador),
     'MaxPenaltyRegularizer': MaxPenaltyRegularizer(lmbd=lambdaRegularizador)
-    #'SmoothStepRegularizer': SmoothStepRegularizer(lmbd=lambdaRegularizador),
-    #'WeightOscillationDampener': WeightOscillationDampener(lmbd=lambdaRegularizador),
-    #'MinimalEnergyRegularizer': MinimalEnergyRegularizer(lmbd=lambdaRegularizador),
-    #'CenteredWeightRegularizer': CenteredWeightRegularizer(lmbd=lambdaRegularizador, center=0.1),
-    #'EntropyLikeWeightRegularizer': EntropyLikeWeightRegularizer(lmbd=lambdaRegularizador, epsilon=1e-7),
-    #'AntiSaturationRegularizer': AntiSaturationRegularizer(lmbd=lambdaRegularizador),
-    #'SparseGroupRegularizer': SparseGroupRegularizer(lmbd=lambdaRegularizador),
-    #'LayerSmoothnessRegularizer': LayerSmoothnessRegularizer(lmbd=lambdaRegularizador)
 }
 
 # Lista para almacenar los resultados
 results = []
 numero_caracteristicas = X_train.shape[1]
+print(f"Número de características: {numero_caracteristicas}")
 
 # Entrenar y evaluar modelos
 for nombre_reg, regularizador in regularizadoresPropios.items():
-    # Definir los algoritmos de optimización a utilizar y sus parámetros de aprendizaje
+
+    # Definir los algoritmos de optimización a utilizar y sus parámetros de aprendizaje, se dejan en esta seccion ya que se encontró un error al definirlos fuera del bucle
     algoritmos_optimizacion = {
         'SGD': SGD(learning_rate=0.001),
         'RMSprop': RMSprop(learning_rate=0.001),
@@ -61,16 +49,9 @@ for nombre_reg, regularizador in regularizadoresPropios.items():
         # Construir el modelo con regularización
         model = construir_modelo(input_dim=numero_caracteristicas, regularizer_instance = regularizador)
         
-        # Entrenar el modelo con los datos de entrenamiento y validación
-        history, tiempo_entrenamiento = train_model(model, X_train, y_train, optimizador, X_test, y_test, )
-        
-        # Imprimir el resumen del modelo
-        model.summary()
-        
-        # Evaluar el modelo
-        resultados_evaluacion = evaluate_model(model, X_test, y_test)
-        
-        # Crear un diccionario con los resultados
+        # Entrenar el modelo con los datos de entrenamiento y validacion, luego evaluar con los datos de prueba y almacenar los resultados
+        history, tiempo_entrenamiento = entrenar_modelo(model, X_train, y_train, optimizador, X_test, y_test, )
+        resultados_evaluacion = evaluar_modelo(model, X_test, y_test)
         res = {
             'Regularizador': nombre_reg,
             'Algoritmo optimizacion': nombre_opt,
@@ -85,14 +66,14 @@ for nombre_reg, regularizador in regularizadoresPropios.items():
             'Training Time (s)': tiempo_entrenamiento
         }
 
-        # Línea crítica que proporciona feedback inmediato del rendimiento del modelo
+        # Retroalimentación de los resultados
         print(f"{nombre_reg} + {nombre_opt} → Acc: {res['Test Accuracy']:.4f}, F1: {res['F1_score']:.4f}, AUC: {res['ROC_AUC']:.4f}")
         results.append(res)
 
         # Grafica la precisión de validación para cada regularizador en el grafico
         plt.plot(history.history['val_accuracy'], label= "{} + {}".format(nombre_reg, nombre_opt))
 
-        # Gráfico de pérdida de entrenamiento y validación
+        # Gráfico de pérdida de entrenamiento y validación de cada regularizador y optimizador
         plt.figure(figsize=(10, 6))
         plt.plot(history.history['loss'], label='Train Loss', drawstyle='default' )
         plt.plot(history.history['val_loss'], label='Validation Loss', drawstyle='default')
@@ -116,7 +97,7 @@ for nombre_reg, regularizador in regularizadoresPropios.items():
     plt.savefig(nombre_archivo, dpi=300)
     plt.close()
 
-# Convertir los resultados a un DataFrame de pandas para una mejor visualización
+# Mostrar los resultados en una tabla 
 results_df = pd.DataFrame(results)
 print("\n--- Tabla de Resultados Numéricos ---")
 print(results_df.round(4).to_string())
